@@ -1,4 +1,4 @@
-import { UserType } from 'src/presentation/user/user.dto';
+import { UserType } from 'src/presentation/controllers/user/user.dto';
 
 export interface IUser {
     user_id: string;
@@ -11,3 +11,4 @@ export interface IUser {
     created_at: Date;
     updated_at: Date;
 }
+

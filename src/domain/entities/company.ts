@@ -1,10 +1,9 @@
-import { UserType } from 'src/presentation/controllers/user/user.dto';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('users')
+@Entity('company')
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    user_id: string;
+    company_id: string;
 
     @Column({ type: 'varchar', nullable: true })
     name?: string;
@@ -12,17 +11,17 @@ export class User {
     @Column({ type: 'varchar', nullable: true, unique: true })
     email?: string;
 
-    @Column({ type: 'text', nullable: true })
-    password_hash?: string;
+    @Column({ type: 'boolean', nullable: true })
+    is_active?: boolean;
+
+    @Column({ type: 'boolean', nullable: true })
+    is_external?: boolean;
 
     @Column({ type: 'varchar', nullable: true })
-    user_type?: UserType;
-
-    @Column({ type: 'boolean', default: false })
-    is_active: boolean = false;
+    location?: string;
 
     @Column({ type: 'varchar', nullable: true })
-    company_id?: string;
+    business_area?: string;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;

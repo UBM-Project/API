@@ -1,9 +1,9 @@
 // src/presentation/user/user.module.ts
 import { Module } from "@nestjs/common";
-import { UserRepository } from "../repositories/user.repository";
+import { UserRepository } from "../../repositories/user.repository";
 import { PostgresAdapter } from "src/infrastructure/db/client";
-import { UserController } from "../user/user.controller";
-import { UserService } from "src/application/user/user.service";
+import { UserController } from "../controllers/user/user.controller";
+import { UserService } from "src/application/user.service";
 
 @Module({
     controllers: [UserController],

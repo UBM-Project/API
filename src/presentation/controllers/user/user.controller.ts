@@ -13,17 +13,18 @@ import {
     UseGuards
 } from '@nestjs/common';
 import { CreateUserDto, UpdatePasswordDto, UpdateUserDto, UserLoginDto } from './user.dto';
-import * as IUserRepository from 'src/domain/interfaces/user/IUser.repository';
-import * as IUserService from 'src/domain/interfaces/user/IUser.service';
-import { JwtAuthGuard } from '../auth/auth.guard';
+import * as IRepository from 'src/domain/interfaces/IRepository';
+import * as IService from 'src/domain/interfaces/IService';
+import { JwtAuthGuard } from '../../auth/auth.guard';
+
 @Controller('users')
 export class UserController {
     constructor(
         @Inject('UserRepositoryPort')
-        private readonly userRepository: IUserRepository.UserRepositoryPort,
+        private readonly userRepository: IRepository.UserRepositoryPort,
 
         @Inject('UserServicePort')
-        private readonly userService: IUserService.UserServicePort,
+        private readonly userService: IService.UserServicePort,
     ) { }
 
     @Post()

@@ -1,7 +1,7 @@
 // src/domain/services/user.service.ts
 import { Injectable, UnauthorizedException, BadRequestException, Inject } from '@nestjs/common';
-import type { UserRepositoryPort } from '../../domain/interfaces/user/IUser.repository';
-import { CreateUserDto, UpdatePasswordDto, UserLoginDto } from 'src/presentation/user/user.dto';
+import type { UserRepositoryPort } from '../domain/interfaces/IRepository';
+import { CreateUserDto, UpdatePasswordDto, UserLoginDto } from 'src/presentation/controllers/user/user.dto';
 import * as bcrypt from 'bcrypt';
 import { SignJWT } from 'jose';
 
@@ -44,7 +44,7 @@ export class UserService {
         const { password_hash, ...rest }: Record<string, any> = dto;
         const [user] = await this.userRepository.findLogin(rest);
 
-        if (!user.password_hash) {
+        if (!user.data.password_hash) {
             throw new UnauthorizedException('Usuário ou senha incorretos');
         }
 
@@ -55,7 +55,7 @@ export class UserService {
         }
 
         // Criação do JWT usando jose
-        const token = await new SignJWT({ sub: user.user_id, email: user.email })
+        const token = await new SignJWT({ sub: user.data.user_id, email: user.data.email })
             .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
             .setExpirationTime('2h')
             .sign(new TextEncoder().encode(process.env.JWT_SECRET || 'default_secret'));
