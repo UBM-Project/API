@@ -26,6 +26,7 @@ export class ProposalRepository implements ProposalRepositoryPort {
     }
 
     async create(dto: CreateProposalDto): Promise<IResponseHateoas<any>> {
+        // 1. Cria a proposal principal
         const result = await this.db.query(
             `INSERT INTO ${tablesClient.proposal} 
       (project_id, company_id, user_id, user_email, participants, solving_company_id, submitting_company_id, attachment_path, market_value, proposal_value, is_volunteer, status) 
@@ -47,8 +48,24 @@ export class ProposalRepository implements ProposalRepositoryPort {
             ],
         );
 
-        return this.buildHateoas(result[0]);
+        const createdProposal = result[0];
+
+        // 2. Cria o vínculo em proposal_user (1x1, não lista)
+        await this.db.query(
+            `INSERT INTO ${tablesClient.proposal_user} 
+        (proposal_id, user_id, proposal_name, user_email) 
+        VALUES ($1, $2, $3, $4)`,
+            [
+                createdProposal.proposal_id,
+                createdProposal.user_id,
+                createdProposal.proposal_name || null,
+                createdProposal.user_email || null,
+            ],
+        );
+
+        return this.buildHateoas(createdProposal);
     }
+
 
 
     async findById(id: string): Promise<IResponseHateoas<any>> {
